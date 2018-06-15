@@ -8,7 +8,7 @@ public class Contact {
     String name,email,organisation,number,relationship;
     int id;
 
-    public Contact(String name, String email, String organisation, String number, int id,String relationship) {
+    public Contact( int id,String name,String number, String email, String organisation, String relationship) {
         this.name = name;
         this.email = email;
         this.organisation = organisation;
@@ -20,7 +20,15 @@ public class Contact {
     public Contact() {
     }
 
-    public Contact(String name, String email, String organisation, String number) {
+    public String getRelationship() {
+        return relationship;
+    }
+
+    public void setRelationship(String relationship) {
+        this.relationship = relationship;
+    }
+
+    public Contact(String name , String number,String email, String organisation) {
         this.name = name;
         this.email = email;
         this.organisation = organisation;

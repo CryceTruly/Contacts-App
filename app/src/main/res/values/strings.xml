@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Contacts App</string>
+    <string-array name="relationships">
+        <item>Family</item>
+        <item>Work</item>
+        <item>Friend</item>
+    </string-array>
 </resources>
