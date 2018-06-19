@@ -221,7 +221,7 @@
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/btns"
                         android:padding="5dp"
-                        android:text="Add Contact"
+                        android:text="Edit Contact"
                         android:textColor="@android:color/white" />
 
 

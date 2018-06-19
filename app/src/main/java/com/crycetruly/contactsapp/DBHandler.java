@@ -12,6 +12,7 @@ import android.util.Log;
 import com.crycetruly.contactsapp.model.Contact;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -37,7 +38,8 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE =
-                "CREATE TABLE " + TABLENAME + "(" + IDCOL + " int PRIMARY KEY," + NAMECOL + " TEXT," + EMAILCOL + " TEXT," + NUMBERCOL + " TEXT" + ORGANISATIONCOL + " TEXT," + RELATIONSHIPCOL + " TEXT)";
+ "CREATE TABLE " + TABLENAME + "(" + IDCOL + " integer PRIMARY KEY autoincrement," + NAMECOL + " TEXT," + EMAILCOL + " TEXT,"
+         + NUMBERCOL + " TEXT," + ORGANISATIONCOL + " TEXT," + RELATIONSHIPCOL + " TEXT)";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -49,19 +51,29 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void addContact(Contact contact) {
+    public boolean addContact(Contact contact) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(IDCOL, contact.getId());
         contentValues.put(NAMECOL, contact.getName());
         contentValues.put(NUMBERCOL, contact.getNumber());
         contentValues.put(EMAILCOL, contact.getEmail());
         contentValues.put(RELATIONSHIPCOL, contact.getRelationship());
         contentValues.put(ORGANISATIONCOL, contact.getOrganisation());
 
+
+
+
+
         long result = sqLiteDatabase.insert(TABLENAME, null, contentValues);
+        sqLiteDatabase.close();
         if (result != -1) {
             Log.d(TAG, "addContact: Data addded successfully");
+
+            return true;
+        }else{
+            Log.d(TAG, "addContact:Data not  addded successfully "+result);
+
+            return false;
         }
 
 
@@ -102,30 +114,48 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     public List<Contact> getContacts() {
-        String query = "SELECT * FROM " + TABLENAME;
+        List<Contact> contacts = new LinkedList<Contact>();
 
+        // 1. build the query
+        String query = "SELECT  * FROM " + TABLENAME;
 
-        List<Contact> contacts = new ArrayList<>();
-        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        // 2. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
 
-        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        // 3. go over each row, build book and add it to list
+        Contact contact = null;
         if (cursor.moveToFirst()) {
-
-            Contact contact = new Contact();
             do {
+                contact = new Contact();
                 contact.setId(Integer.parseInt(cursor.getString(0)));
                 contact.setName(cursor.getString(1));
                 contact.setEmail(cursor.getString(2));
                 contact.setNumber(cursor.getString(3));
                 contact.setOrganisation(cursor.getString(4));
                 contact.setRelationship(cursor.getString(5));
+                contacts.add(contact);
 
             } while (cursor.moveToNext());
-
-
         }
+
+
+        // return books
         return contacts;
+
+
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public int updateContact(Contact contact) {
         SQLiteDatabase database = getWritableDatabase();
@@ -139,11 +169,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public void deleteContact(Contact contact) {
+    public  void deleteContact(int id) {
 
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 
-        sqLiteDatabase.delete(TABLENAME, IDCOL + " = ? ", new String[]{String.valueOf(contact.getId())});
+        sqLiteDatabase.delete(TABLENAME, IDCOL + " = ? ", new String[]{String.valueOf(id)});
 
 
     }

@@ -16,7 +16,14 @@ public class Contact {
         this.relationship=relationship;
         this.id = id;
     }
+    public Contact( String name,String number, String email, String organisation, String relationship) {
+        this.name = name;
+        this.email = email;
+        this.organisation = organisation;
+        this.number = number;
+        this.relationship=relationship;
 
+    }
     public Contact() {
     }
 
@@ -73,5 +80,17 @@ public class Contact {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Contact{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", organisation='" + organisation + '\'' +
+                ", number='" + number + '\'' +
+                ", relationship='" + relationship + '\'' +
+                ", id=" + id +
+                '}';
     }
 }
