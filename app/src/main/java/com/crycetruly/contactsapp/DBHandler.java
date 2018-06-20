@@ -165,7 +165,9 @@ public class DBHandler extends SQLiteOpenHelper {
         contentValues.put(EMAILCOL, contact.getEmail());
         contentValues.put(RELATIONSHIPCOL, contact.getRelationship());
         contentValues.put(ORGANISATIONCOL, contact.getOrganisation());
-        return database.update(TABLENAME, contentValues, IDCOL + " = ? ", new String[]{String.valueOf(contact.getId())});
+
+        return database.update(TABLENAME, contentValues, IDCOL + " = ? ",
+                new String[]{String.valueOf(contact.getId())});
 
     }
 
